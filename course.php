@@ -53,7 +53,7 @@ $coursetable->data = array();
 foreach ($cxsizes as $cxdata) {
     $row = array();
     $row[] = $cxdata->component;
-    $row[] = number_format(ceil($cxdata->filesize )) . "MB";
+    $row[] = number_format(ceil($cxdata->filesize /1000000 )) . "MB";
 
     $coursetable->data[] = $row;
 }
@@ -71,14 +71,14 @@ $sizesql = "SELECT SUM(filesize) FROM (SELECT DISTINCT contenthash, filesize
                                        AND f.filename != '.')) b";
 $size = $DB->get_field_sql($sizesql, array($contextcheck, $contextcheck));
 if (!empty($size)) {
-    $size = number_format(ceil($size )) . "MB";
+    $size = number_format(ceil($size /1000000 )) . "MB";
 }
 
 // All the processing done, the rest is just output stuff.
 
 print $OUTPUT->header();
 
-print $OUTPUT->heading(get_string('coursesize0', 'report_coursesize0'). " - ". format_string($course->fullname));
+print $OUTPUT->heading(get_string('coursesize', 'report_coursesize0'). " - ". format_string($course->fullname));
 print $OUTPUT->box(get_string('coursereport', 'report_coursesize0'));
 if (!empty($size)) {
     print $OUTPUT->box(get_string('sharedusagecourse', 'report_coursesize0', $size));
